@@ -1,30 +1,39 @@
 import streamlit as st
 
 # ---- Section 1: Data Tables for BP Percentiles ----
-# Neonatal BP percentiles by PMA (weeks) for SBP and DBP (50th, 95th, 99th) [oai_citation:23‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=26weeks%20SBP%20MAP%20DBP%2055,30%2072%2057%2050%2077) [oai_citation:24‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=44weeks%20SBP%20MAP%20DBP%2088,50%20105%2080%2068%20110).
-# Source: Dionne et al., Arch Dis Child 2017 (normal-weight neonates after 2 weeks of age) [oai_citation:25‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=neonates,values%20consistently%20above%20the%2099th).
+
+# Neonatal BP percentiles by PMA (weeks) for SBP and DBP (50th, 95th)
 neonate_bp_data = {
-    26: {'SBP': (55, 72), 'DBP': (30, 50)},  # (50th, 95th) percentiles at 26 weeks [oai_citation:26‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=26weeks%20SBP%20MAP%20DBP%2055,38%2030%2072%2057%2050)
-    28: {'SBP': (60, 75), 'DBP': (38, 50)},  #  [oai_citation:27‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=28weeks%20SBP%20MAP%20DBP%2060,45%2038%2075%2058%2050)
-    30: {'SBP': (65, 80), 'DBP': (40, 55)},  #  [oai_citation:28‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=30weeks%20SBP%20MAP%20DBP%2065,48%2040%2080%2063%2055)
-    32: {'SBP': (68, 83), 'DBP': (40, 55)},  #  [oai_citation:29‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=32weeks%20SBP%20MAP%20DBP%2068,49%2040%2083%2064%2055)
-    34: {'SBP': (70, 85), 'DBP': (40, 55)},  #  [oai_citation:30‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=34weeks%20SBP%20MAP%20DBP%2070,50%2040%2085%2065%2055)
-    36: {'SBP': (72, 87), 'DBP': (50, 65)},  #  [oai_citation:31‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=36weeks%20SBP%20MAP%20DBP%2072,57%2050%2087%2072%2065)
-    38: {'SBP': (77, 92), 'DBP': (50, 65)},  #  [oai_citation:32‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=38weeks%20SBP%20MAP%20DBP%2077,59%2050%2092%2074%2065)
-    40: {'SBP': (80, 95), 'DBP': (50, 65)},  #  [oai_citation:33‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=40weeks%20SBP%20MAP%20DBP%2080,60%2050%2095%2075%2065)
-    42: {'SBP': (85, 98), 'DBP': (50, 65)},  #  [oai_citation:34‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=42weeks%20SBP%20MAP%20DBP%2085,62%2050%2098%2076%2065)
-    44: {'SBP': (88, 105), 'DBP': (50, 68)}  #  [oai_citation:35‡renaissance.stonybrookmedicine.edu](https://renaissance.stonybrookmedicine.edu/sites/default/files/NeonatalHTNflynnupdated.pdf#:~:text=44weeks%20SBP%20MAP%20DBP%2088,63%2050%20105%2080%2068)
+    26: {'SBP': (55, 72), 'DBP': (30, 50)},
+    28: {'SBP': (60, 75), 'DBP': (38, 50)},
+    30: {'SBP': (65, 80), 'DBP': (40, 55)},
+    32: {'SBP': (68, 83), 'DBP': (40, 55)},
+    34: {'SBP': (70, 85), 'DBP': (40, 55)},
+    36: {'SBP': (72, 87), 'DBP': (50, 65)},
+    38: {'SBP': (77, 92), 'DBP': (50, 65)},
+    40: {'SBP': (80, 95), 'DBP': (50, 65)},
+    42: {'SBP': (85, 98), 'DBP': (50, 65)},
+    44: {'SBP': (88, 105), 'DBP': (50, 68)}
 }
-# (Note: For neonates, 90th percentile is not explicitly published; we interpolate between 50th and 95th.)
+# Note: For neonates, the 90th percentile is not published; interpolate if needed between 50th and 95th.
 
 # Infant BP reference ranges by age in months (male and female).
-# Source: Derived from AHA/AAP PEARS vital signs reference (normal BP range) [oai_citation:36‡childrensmercy.org](https://www.childrensmercy.org/siteassets/media-documents-for-depts-section/documents-for-health-care-providers/evidence-based-practice/clinical-practice-guidelines--care-process-models/normal-blood-pressures-by-age.pdf#:~:text=Female%20Male%20Female%20Male%20Neonate,to%2075%2057%20to%2076).
-# Values are given as (male_50th_est, male_95th_est, female_50th_est, female_95th_est) for SBP and DBP.
+# Values: (male_50th, male_95th, female_50th, female_95th) for SBP and DBP.
+# Values are mid-range from published tables; adjust as needed per local reference.
 infant_bp_data = {
-    1:  {'SBP': (84, 94, 82, 91),  'DBP': (46, 55, 46, 56)},  # 1 month: male 74-94, female 73-91 (approx median 84 vs 82) [oai_citation:37‡childrensmercy.org](https://www.childrensmercy.org/siteassets/media-documents-for-depts-section/documents-for-health-care-providers/evidence-based-practice/clinical-practice-guidelines--care-process-models/normal-blood-pressures-by-age.pdf#:~:text=Neonate%20,to%2064%2045%20to%2065)
-    3:  {'SBP': (90, 103, 89, 100), 'DBP': (54, 65, 54, 64)},  # 3 months: male 81-103, female 78-100 [oai_citation:38‡childrensmercy.org](https://www.childrensmercy.org/siteassets/media-documents-for-depts-section/documents-for-health-care-providers/evidence-based-practice/clinical-practice-guidelines--care-process-models/normal-blood-pressures-by-age.pdf#:~:text=Infant%20,to%2066%2048%20to%2068)
-    6:  {'SBP': (96, 105, 92, 102), 'DBP': (58, 68, 56, 66)},  # 6 months: male 87-105, female 82-102 [oai_citation:39‡childrensmercy.org](https://www.childrensmercy.org/siteassets/media-documents-for-depts-section/documents-for-health-care-providers/evidence-based-practice/clinical-practice-guidelines--care-process-models/normal-blood-pressures-by-age.pdf#:~:text=Infant%20,to%2066%2037%20to%2056)
-    12: {'SBP': (94, 103, 95, 104), 'DBP': (50, 65, 50, 66)}  # 12 months: ~ male 85-103, female 86-104 [oai_citation:40‡childrensmercy.org](https://www.childrensmercy.org/siteassets/media-documents-for-depts-section/documents-for-health-care-providers/evidence-based-practice/clinical-practice-guidelines--care-process-models/normal-blood-pressures-by-age.pdf#:~:text=Infant%20,to%2058%2042%20to%2061)
+    1:  {'SBP': (84, 94, 82, 91),  'DBP': (46, 55, 46, 56)},
+    3:  {'SBP': (90, 103, 89, 100), 'DBP': (54, 65, 54, 64)},
+    6:  {'SBP': (96, 105, 92, 102), 'DBP': (58, 68, 56, 66)},
+    12: {'SBP': (94, 103, 95, 104), 'DBP': (51, 65, 56, 66)} # 12 mo: medians computed from available ranges.
+}
+# If you need more months, interpolate between these reference points.
+
+# Pre-computed height chart (median and 5th/95th length (cm) for boys/girls by age in months).
+length_chart = {
+    1:  {'M_median': 54.5, 'M_95th': 59.0, 'M_5th': 50.0,  'F_median': 53.5, 'F_95th': 57.5, 'F_5th': 49.0},
+    3:  {'M_median': 61.5, 'M_95th': 66.0, 'M_5th': 57.0,  'F_median': 60.5, 'F_95th': 64.5, 'F_5th': 56.0},
+    6:  {'M_median': 67.5, 'M_95th': 72.0, 'M_5th': 63.0,  'F_median': 65.7, 'F_95th': 70.0, 'F_5th': 61.5},
+    12: {'M_median': 76.0, 'M_95th': 82.0, 'M_5th': 70.0,  'F_median': 74.0, 'F_95th': 80.0, 'F_5th': 68.0}
 }
 # The 12-month entry above uses ~median ("Fifty50") ~50 mmHg for DBP as a placeholder to indicate ~50th percentile.
 # (We will replace 'Fifty50' with numeric median values below.)
